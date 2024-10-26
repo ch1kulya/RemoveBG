@@ -1,80 +1,130 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>✂️ rmbg</title>
-    <style>
-      body {
-        height: 100vh;
-        display: flex;
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>RemoveBG</title>
+  <link rel="stylesheet" href="https://raw.githack.com/ch1kulya/styleBasic/main/styleBasic.css">
+  <link rel="icon" href="https://raw.githack.com/ch1kulya/RemoveBG/main/favicon.ico" type="image/x-icon">
+  <meta name="keywords" content="RemoveBG, удаление фона, обработка изображений, онлайн инструмент">
+  <meta name="author" content="ch1ka">
+  <meta name="description" content="RemoveBG - удаление фона с изображений прямо в вашем браузере. Быстро и безопасно.">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
 
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-      .drop-zone {
-        border: 2px dashed #ccc;
-        padding: 20px;
-        width: 80vw;
-        height: 80vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-      }
+    .card {
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      padding: 20px;
+    }
 
-      .drop-zone.dragover {
-        background-color: #f0f0f0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="dropZone" class="drop-zone">
-      <h1>rmbg</h1>
-      <form
-        id="uploadForm"
-        action="/"
-        method="post"
-        enctype="multipart/form-data"
-      >
-        <input id="fileInput" type="file" name="file" />
-        <input type="submit" value="rm" />
+    .drop-zone {
+      border: 2px dashed var(--border-color);
+      padding: 20px;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background-color 0.2s ease;
+    }
+
+    .drop-zone.dragover {
+      background-color: var(--background-hover);
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 12px;
+      color: var(--text-color);
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <!-- Кнопка переключения темы -->
+  <button id="theme-toggle" class="theme-toggle">🌙</button>
+
+  <!-- Контент -->
+  <div class="container">
+    <div class="card">
+      <h1>RemoveBG</h1>
+
+      <div id="dropZone" class="drop-zone" style="border-radius: 10px;">
+        <p>Перетащите изображение сюда или нажмите для загрузки</p>
+      </div>
+
+      <form id="uploadForm" action="/" method="post" enctype="multipart/form-data">
+        <input id="fileInput" type="file" name="file" accept="image/*">
+        <input type="submit" value="Upload" style="display: none;">
       </form>
     </div>
+  </div>
 
-    <script>
-      let dropZone = document.getElementById("dropZone");
-      let fileInput = document.getElementById("fileInput");
-      let uploadForm = document.getElementById("uploadForm");
+  <!-- Футер -->
+  <footer>
+    <p>made with ♡ by ch1ka</p>
+  </footer>
 
-      dropZone.addEventListener("click", function () {
-        fileInput.click();
-      });
+  <!-- Скрипты -->
+  <script src="https://raw.githack.com/ch1kulya/styleBasic/main/theme.js"></script>
+  <script>
+    let dropZone = document.getElementById("dropZone");
+    let fileInput = document.getElementById("fileInput");
+    let uploadForm = document.getElementById("uploadForm");
 
-      fileInput.addEventListener("change", function () {
-        if (fileInput.files.length > 0) {
-          uploadForm.submit();
-        }
-      });
+    dropZone.addEventListener("click", function () {
+      fileInput.click();
+    });
 
-      dropZone.addEventListener("dragover", function (e) {
-        this.classList.add("dragover");
-      });
+    fileInput.addEventListener("change", function () {
+      if (fileInput.files.length > 0) {
+        uploadForm.submit();
+      }
+    });
 
-      dropZone.addEventListener("dragleave", function (e) {
-        this.classList.remove("dragover");
-      });
+    dropZone.addEventListener("dragover", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.add("dragover");
+    });
 
-      dropZone.addEventListener("drop", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        this.classList.remove("dragover");
+    dropZone.addEventListener("dragleave", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.remove("dragover");
+    });
 
-        let file = e.dataTransfer.files[0];
+    dropZone.addEventListener("drop", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.remove("dragover");
+
+      if (e.dataTransfer.files.length > 0) {
         fileInput.files = e.dataTransfer.files;
         uploadForm.submit();
-      });
-    </script>
-  </body>
+      }
+    });
+  </script>
+</body>
 </html>
